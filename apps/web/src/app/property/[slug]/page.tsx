@@ -27,6 +27,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         images: property.images.length > 0 ? [{ url: property.images[0].url }] : [],
         type: 'website',
       },
+      twitter: {
+        card: 'summary_large_image',
+        title: property.metaTitle || property.title,
+        description: property.metaDescription || property.description?.slice(0, 160),
+        images: property.images.length > 0 ? [property.images[0].url] : [],
+      },
     };
   } catch {
     return {};
@@ -44,7 +50,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
   try {
     property = await getPropertyBySlug(params.slug, { next: { revalidate: 1800 } });
   } catch {
-    notFound();
+    return notFound();
   }
 
   // Similar properties
