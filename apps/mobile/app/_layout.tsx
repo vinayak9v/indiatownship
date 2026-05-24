@@ -1,9 +1,18 @@
+import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '@/context/AuthContext';
+import { registerForPushNotifications } from '@/lib/notifications';
 
 export default function RootLayout() {
+  useEffect(() => {
+    // Request notification permission on app start
+    registerForPushNotifications().catch(() => {
+      // Permission denied — no push notifications, that's fine
+    });
+  }, []);
+
   return (
     <SafeAreaProvider>
       <AuthProvider>
