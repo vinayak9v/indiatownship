@@ -6,3 +6,4 @@ dist/
 .next/
 *.log
 .superpowers/
+.expo/
