@@ -10,6 +10,7 @@ module.exports = function (api) {
           alias: { '@': './src' },
         },
       ],
+      ['transform-inline-environment-variables', { include: ['EXPO_ROUTER_APP_ROOT', 'EXPO_ROUTER_IMPORT_MODE'] }],
     ],
   };
 };

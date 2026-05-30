@@ -4,7 +4,7 @@
     "slug": "indiatownship",
     "version": "1.0.0",
     "scheme": "indiatownship",
-    "platforms": ["ios", "android"],
+    "platforms": ["ios", "android", "web"],
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "splash": {

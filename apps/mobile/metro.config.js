@@ -16,4 +16,26 @@ config.resolver.nodeModulesPaths = [
   path.resolve(workspaceRoot, 'node_modules'),
 ];
 
+// Force React to always resolve from the app's node_modules (deduplicate)
+// Prevents "multiple copies of React" caused by root node_modules having a different version
+const reactPath = path.resolve(projectRoot, 'node_modules/react');
+const reactDomPath = path.resolve(projectRoot, 'node_modules/react-dom');
+const reactNativePath = path.resolve(projectRoot, 'node_modules/react-native');
+
+config.resolver.extraNodeModules = {
+  'react': reactPath,
+  'react-dom': reactDomPath,
+  'react-native': reactNativePath,
+};
+
+const originalResolver = config.resolver.resolveRequest;
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (moduleName === 'react') return { filePath: require.resolve(reactPath), type: 'sourceFile' };
+  if (moduleName === 'react-dom') return { filePath: require.resolve(reactDomPath), type: 'sourceFile' };
+  if (moduleName === 'react/jsx-runtime') return { filePath: require.resolve(path.resolve(reactPath, 'jsx-runtime')), type: 'sourceFile' };
+  if (moduleName === 'react/jsx-dev-runtime') return { filePath: require.resolve(path.resolve(reactPath, 'jsx-dev-runtime')), type: 'sourceFile' };
+  if (originalResolver) return originalResolver(context, moduleName, platform);
+  return context.resolveRequest(context, moduleName, platform);
+};
+
 module.exports = config;
